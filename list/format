@@ -1,0 +1,24 @@
+import requests
+import csv
+from requests.exceptions import HTTPError
+
+fields = ['Domain Name', 'Status', 'Remark', 'Status Code']
+with open('/home/devloper/Desktop/Domain.csv', 'r') as file:
+    reader = csv.reader(file)
+    for url in reader:
+        try:
+            if url:
+                url = url[0]
+                response = requests.get(url)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'error: {http_err}')
+        except Exception as err:
+            print(f'error : {err}')
+        else:
+            print(response.status_code)
+        with open('output.csv', 'a') as csv_output:
+            output_writer = csv.writer(csv_output)
+            output_writer.writerow([url, response.status_code,])
+        # except Exception as e:
+        #     status = str(e)
